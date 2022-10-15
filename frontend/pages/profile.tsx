@@ -5,7 +5,7 @@ import React ,{useState,useEffect}from "react";
 // import styles from "../styles/Profile.module.scss";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getProfile, updateProfile } from "./api/profile";
+import { getProfile, updateProfile,updateLanguage } from "./api/profile";
 import Link from "next/link";
 
 const Profile = () => {
@@ -13,20 +13,25 @@ const Profile = () => {
     id: 'color',
     name: 'Color',
     options: [
-      { value: "value", label: 'C++' },
-      { value: "value", label: 'Java' },
-      { value: "value", label: 'JavaScript' },
-      { value: "value", label: 'Golang' },
-      { value: "value", label: 'Ruby' },
-      { value: "value", label: 'SQL' },
-      { value: "value", label: 'C#' },
+      { value: "cpp", label: 'C++' },
+      { value: "java", label: 'Java' },
+      { value: "javascript", label: 'JavaScript' },
+      { value: "golang", label: 'Golang' },
+      { value: "ruby", label: 'Ruby' },
+      { value: "python", label: 'Python' },
+      { value: "python", label: 'SQL' },
+      { value: "csharp", label: 'C#' },
     ],
   }
 
 
 
-  const [languages,setLanguages]=useState(new Array(filter.options.length).fill(false)
-  )
+  const [languages,setLanguages]=useState(filter.options.map((option,index)=>{
+    return (
+      {[option.value]:false}
+    )
+  }))
+  
   // const [profession,setProfession]=useState("Student")
   const [socialLink,setSocialLink]=useState<social>({
     Github:"",
@@ -45,15 +50,29 @@ const onChangeProfile=(e:React.ChangeEvent<HTMLInputElement> | React.ChangeEvent
   setProfile({...profile,[e.target.name]:e.target.value})
 }
 
-const onChangeLanguage=(position:number)=>{
+const onChangeLanguage=(e:React.ChangeEvent<HTMLInputElement>,position:number)=>{
   const newLanguage=languages.map((item,index)=>
-    index===position ? !item:item)
+    index===position ? {[e.target.value]:!item[e.target.value]}:{...item})
+    console.log(newLanguage)
   setLanguages(newLanguage)
+}
+const onSubmitLanguage=async (e:React.FormEvent<HTMLButtonElement>)=>{
+  e.preventDefault();
+  try {
+    
+    await updateLanguage(languages)
+    toast.success("Success fully saved the data")
+  
+  } catch (err) {
+    console.log(err)
+    let errorS=String(err)
+    toast.error(errorS)
+  }
+
 }
 const onChangeSocial=(e:React.ChangeEvent<HTMLInputElement> )=>{
   setSocialLink({...socialLink,[e.target.name]:e.target.value})
 }
-
 
   // const [profession, setProfession] = React.useState<string |"">("student");
   // const [available,setAvailable]=React.useState<string |  "">("hackathon")
@@ -92,6 +111,9 @@ const getProfileToShow=async(signal:AbortSignal)=>{
     return
    }
   setProfile({...profile,name:data?.name,description:data?.description==null?"":data?.description})
+  if(data?.social===null){
+    return
+  }
   setSocialLink(data?.social)
   } catch (err) {
     console.log(err)
@@ -293,7 +315,8 @@ return ()=>{controller.abort()}
                                 
                                 // defaultValue={option.value}
                                 // checked={onChangeLanguage()}
-                                onChange={()=>onChangeLanguage(optionIdx)}
+                                value={option.value}
+                                onChange={(e)=>onChangeLanguage(e,optionIdx)}
                                 type="checkbox"
                                 className="h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500"
                               />
@@ -314,6 +337,7 @@ return ()=>{controller.abort()}
         </button>
         <button
           type="submit"
+          onClick={onSubmitLanguage}
           className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
           Save
@@ -329,7 +353,8 @@ return ()=>{controller.abort()}
 </div>
 
 </div>
-      {JSON.stringify({name:name,profession,availableFor,social:socialLink,profile:image,description})}
+        {JSON.stringify(languages)}
+      {/* {JSON.stringify({name:name,profession,availableFor,social:socialLink,profile:image,description})} */}
       <ToastContainer/>
     </>
   );
