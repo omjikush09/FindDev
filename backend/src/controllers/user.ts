@@ -51,21 +51,36 @@ export const getAllUsers=async (req:Request,res:Response)=>{
     const profession= query.profession=="student"? "student":"working" 
     console.log(profession)
     // console.log(query)
-
+    const newQuery={}
+    for (const q in query){
+        console.log(q);
+        
+        if(q==="profession"){
+           continue
+        }
+        Object.assign(newQuery,{[q]:true})
+    }
+    console.log(newQuery)
+   
     try {
         const users=await prisma.user.findMany({
             where:{
-                profession
+                profession,
+                Language:newQuery
             },
             select:{
                 id:true,
                 name:true,
                 social:true,
-                description:true
-            }
+                description:true,
+                email:true,
+                Language:true
+                
+            }, 
         })
         return res.json(users)
     } catch (error) {
+        console.log(error)
         return res.status(400).json({error})
     }
 }

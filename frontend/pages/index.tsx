@@ -7,6 +7,7 @@ import { Fragment, useState,useEffect } from 'react'
 import { Dialog, Disclosure, Transition } from '@headlessui/react'
 import { XIcon } from '@heroicons/react/outline'
 import { ChevronDownIcon, PlusSmIcon } from '@heroicons/react/solid'
+import { MailIcon, PhoneIcon } from '@heroicons/react/solid'
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -22,7 +23,7 @@ const filters = [
       { value: "golang", label: 'Golang' },
       { value: "ruby", label: 'Ruby' },
       { value: "python", label: 'Python' },
-      { value: "python", label: 'SQL' },
+      { value: "sql", label: 'SQL' },
       { value: "csharp", label: 'C#' },
     ],
   },
@@ -50,6 +51,18 @@ const filters = [
   //   ],
   // },
 ]
+const people = [
+  {
+    name: 'Jane Cooper',
+    title: 'Paradigm Representative',
+    role: 'Admin',
+    email: 'janecooper@example.com',
+    telephone: '+1-202-555-0170',
+    imageUrl:
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
+  },
+  // More people...
+]
 function classNames(...classes:any) {
   return classes.filter(Boolean).join(' ')
 }
@@ -57,7 +70,12 @@ function classNames(...classes:any) {
 
 const Home: NextPage = () => {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
+  const [values,setValues]=useState({
+    users:[],
+    looding:false,
 
+  })
+  const {users,looding}=values
   const [choice,setChoice]=useState(filters[0].options.map((option,index)=>{
     return (
       {[option.value]:false}
@@ -73,7 +91,7 @@ const Home: NextPage = () => {
 
 const [profession,setProfession]=useState("student")
 
-const onChangeProfession=(e:React.ChangeHandler<HTMLInputElement>)=>{
+const onChangeProfession=(e:React.ChangeEvent<HTMLInputElement>)=>{
   setProfession(e.target.value)
 }
 
@@ -85,6 +103,7 @@ const onChangeProfession=(e:React.ChangeHandler<HTMLInputElement>)=>{
      if(data==undefined){
       return
      }
+     setValues({...values,looding:false,users:data})
     // setProfile({...profile,name:data?.name,description:data?.description==null?"":data?.description})
     // if(data?.social===null){
     //   return
@@ -97,12 +116,25 @@ const onChangeProfession=(e:React.ChangeHandler<HTMLInputElement>)=>{
     }
   }
   useEffect(()=>{
+    setValues({...values,looding:true})
   const controller = new AbortController();
   const signal=controller.signal
   getProfilesToShow(choice,signal)
   
   return ()=>{controller.abort()}
   },[choice,profession])
+
+
+  const languagesToShow=(languages)=>{
+    const list= new Array();
+    for(const l in languages){
+      if(languages[l]===true){
+        list.push(l)
+      }
+    }
+    return (list.map(i=>`   ${i} `))
+  }
+
 
   return (
     <div className="bg-white">
@@ -201,7 +233,7 @@ const onChangeProfession=(e:React.ChangeHandler<HTMLInputElement>)=>{
 
         <main className="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
           <div className="border-b text-center border-gray-200 pb-10">
-            <h className="text-4xl  font-extrabold tracking-tight text-gray-900">Find  Teammates</h>
+            <h1 className="text-4xl  font-extrabold tracking-tight text-gray-900">Find  Teammates</h1>
             <p className="mt-4 text-base text-gray-500">
               Checkout out  all the Devlopers
             </p>
@@ -268,8 +300,70 @@ const onChangeProfession=(e:React.ChangeHandler<HTMLInputElement>)=>{
             {/* Product grid */}
             <div className="mt-6 lg:mt-0 lg:col-span-2 xl:col-span-3">
               {/* Replace with your content */}
-              <div className="border-4 border-dashed border-gray-200 rounded-lg h-96 lg:h-full" />
+              
+              {/* <div className="border-4 border-dashed border-gray-200 rounded-lg h-96 lg:h-full" /> */}
               {/* /End replace */}
+              <ul role="list" className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      {users.length>0 && users.map((person:any) => (
+        <li
+          key={person?.id}
+          className="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200"
+        >
+          <div className="flex-1 flex flex-col p-8">
+            {/* <img className="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src={person.imageUrl} alt="" /> */}
+            <h3 className="mt-6 text-gray-900 text-sm font-medium">{person?.name}</h3>
+            <dl className="mt-1 flex-grow flex flex-col justify-between">
+              <dt className="sr-only">Title</dt>
+              <dd className="text-gray-500 text-sm">{person.title}</dd>
+              <dt className="sr-only">Role</dt>
+              <dd className="mt-3">
+              Languages{` `}{` `}
+                {person?.Language!=null && <span className="px-2 py-1 text-green-800 text-xs font-medium bg-green-100 rounded-full">
+                {languagesToShow(person?.Language) }
+                </span>       }
+              </dd>
+            </dl>
+          </div>
+          <div>
+            <div className="-mt-px flex divide-x divide-gray-200">
+              <div className="w-0 flex-1 flex">
+                <a
+                  href={`mailto:${person.email}`}
+                  className="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500"
+                >
+                  <MailIcon className="w-5 h-5 text-gray-400" aria-hidden="true" />
+                  <span className="ml-3">Email</span>
+                </a>
+              </div>
+              <div className="-ml-px w-0 flex-1 flex">
+                { person?.social?.Github && 
+                <a
+                  href={`${person?.social?.Github}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500"
+                >
+                  {/* <PhoneIcon className="w-5 h-5 text-gray-400" aria-hidden="true" /> */}
+                  <span className="ml-3">Github</span>
+                </a>}
+              </div>
+              <div className="-ml-px w-0 flex-1 flex">
+                { person?.social?.Linkedin && 
+                <a
+                  href={`${person?.social?.Linkedin}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500"
+                >
+                  {/* <PhoneIcon className="w-5 h-5 text-gray-400" aria-hidden="true" /> */}
+                  <span className="ml-3">LinkedIn</span>
+                </a>}
+              </div>
+            </div>
+          </div>
+        </li>
+      ))}
+    </ul>
             </div>
           </div>
         </main>
