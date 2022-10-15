@@ -72,3 +72,41 @@ export const updateLanguage= async (language: {
 }
 
 
+export const getAllUser= async (profession:string,choice:{
+    [x: string]: boolean;
+}[],signal?:AbortSignal) =>{
+
+    try {
+        const body={};
+        for(let i=0;i<choice.length;i++){
+            console.log(choice[i])
+            if(choice[i]===false){
+                continue;
+            }
+          Object.assign(body,choice[i]);
+        }
+        const sendParam={}
+        for (const value in body){
+            if(body[value]===false){
+                continue;
+            }
+            console.log(value)
+            Object.assign(sendParam,{[value]:body[value]});
+        }
+        Object.assign(sendParam,{profession});
+        console.log(sendParam)
+
+        const {data}= await backend.get("/api/getallusers",{signal,params:sendParam})
+        return data;
+
+    } catch (error:any) {
+        console.log(error);
+        if (error?.name== 'CanceledError'){
+           return
+        }
+        if(error.response?.data?.error){ 
+            throw new Error(error.response.data.error)
+        }
+        throw new Error("Something went wrong") 
+    }
+}
