@@ -130,6 +130,10 @@ return ()=>{controller.abort()}
 },[])
   return (
     <>
+    <div className="text-right mr-52 mt-8" > <Link href="/" ><button
+        type="button"
+        className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      >Home</button></Link></div>
    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 text-center">
     Change Profile
    <div className="max-w-3xl mx-auto">

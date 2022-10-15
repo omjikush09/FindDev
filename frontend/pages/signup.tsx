@@ -1,6 +1,7 @@
 import { NextPage } from 'next'
 import { useRouter } from 'next/router';
 import Head from "next/head"
+import Link from "next/link"
 // import type { AppProps } from 'next/app'
 import React, { useState } from 'react';
 import axios from 'axios';
@@ -65,7 +66,10 @@ const Signup:NextPage =()=>{
   /> */}
 
     </Head>
-
+    <div className="text-right pr-52 pt-8 bg-gray-50" > <Link href="/signin" ><button
+        type="button"
+        className="inline-flex items-center  px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      >Signin</button></Link></div>
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <img

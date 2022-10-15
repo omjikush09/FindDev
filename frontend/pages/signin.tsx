@@ -1,6 +1,7 @@
 import { NextPage } from 'next'
 import Head from "next/head"
 import Image from 'next/image';
+import Link from 'next/link';
 // import type { AppProps } from 'next/app'
 import React, { HtmlHTMLAttributes, useState } from 'react';
 import axios from 'axios';
@@ -63,7 +64,10 @@ const onChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
   /> */}
 
     </Head>
-    
+    <div className="text-right pr-52 pt-8 bg-gray-50" > <Link href="/signup" ><button
+        type="button"
+        className="inline-flex items-center  px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      >Signup</button></Link></div>
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <img
