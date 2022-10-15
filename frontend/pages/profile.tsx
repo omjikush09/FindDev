@@ -1,18 +1,11 @@
 import { NextPage } from "next";
-import {Image} from "next/image";
-import React ,{useState}from "react";
-import {
-  Container,
-  Typography,
-  Grid,
-  TextField,
-  MenuItem,
-  Button,
-} from "@mui/material";
-import { styled } from "@mui/material/styles";
-import styles from "../styles/Profile.module.scss";
+// import {Image} from "next/image";
+import React ,{useState,useEffect}from "react";
+
+// import styles from "../styles/Profile.module.scss";
 import { ToastContainer, toast } from 'react-toastify';
-import { updateProfile } from "./api/profile";
+import 'react-toastify/dist/ReactToastify.css';
+import { getProfile, updateProfile } from "./api/profile";
 import Link from "next/link";
 
 const Profile = () => {
@@ -29,6 +22,9 @@ const Profile = () => {
       { value: "value", label: 'C#' },
     ],
   }
+
+
+
   const [languages,setLanguages]=useState(new Array(filter.options.length).fill(false)
   )
   // const [profession,setProfession]=useState("Student")
@@ -45,6 +41,10 @@ const Profile = () => {
   })
 const {name,description,availableFor,profession}=profile
 
+const onChangeProfile=(e:React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLSelectElement>)=>{
+  setProfile({...profile,[e.target.name]:e.target.value})
+}
+
 const onChangeLanguage=(position:number)=>{
   const newLanguage=languages.map((item,index)=>
     index===position ? !item:item)
@@ -54,9 +54,7 @@ const onChangeSocial=(e:React.ChangeEvent<HTMLInputElement> )=>{
   setSocialLink({...socialLink,[e.target.name]:e.target.value})
 }
 
-const onChangeProfile=(e:React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLSelectElement>)=>{
-  setProfile({...profile,[e.target.name]:e.target.value})
-}
+
   // const [profession, setProfession] = React.useState<string |"">("student");
   // const [available,setAvailable]=React.useState<string |  "">("hackathon")
   const [image,setImage]=useState<FormData | undefined>(undefined);
@@ -69,12 +67,45 @@ const onChangeProfile=(e:React.ChangeEvent<HTMLInputElement> | React.ChangeEvent
     setImage(formdata)
   }
 
-const onSubmit=()=>{
+const onSubmit=async (e:React.FormEvent<HTMLButtonElement>)=>{
+  e.preventDefault();
   
   const Profile:Profile={name:name,profession,availableFor,social:socialLink,profile:image,description}
-
+  console.log(Profile);
+  try {
+    await updateProfile(Profile)
+    toast.success("Success fully saved the data")
+  
+  } catch (err) {
+    console.log(err)
+    let errorS=String(err)
+    toast.error(errorS)
+  }
 }
 
+
+const getProfileToShow=async(signal:AbortSignal)=>{
+  try {
+    const data=await getProfile(signal)
+   console.log(data)
+   if(data==undefined){
+    return
+   }
+  setProfile({...profile,name:data?.name,description:data?.description==null?"":data?.description})
+  setSocialLink(data?.social)
+  } catch (err) {
+    console.log(err)
+    let errorS=String(err)
+    toast.error(errorS)
+  }
+}
+useEffect(()=>{
+const controller = new AbortController();
+const signal=controller.signal
+getProfileToShow(signal)
+
+return ()=>{controller.abort()}
+},[])
   return (
     <>
    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 text-center">
@@ -197,7 +228,7 @@ const onSubmit=()=>{
                   </select>
                 </div>
                 <div>
-                <label className="block text-sm font-medium text-gray-700">Photo</label>
+                <label className="block text-sm font-medium text-gray-700">Profile Image</label>
                 <div className="mt-1 flex items-center space-x-5">
                   <span className="inline-block h-12 w-12 rounded-full overflow-hidden bg-gray-100">
                     
@@ -228,11 +259,13 @@ const onSubmit=()=>{
         </button>
         <button
           type="submit"
+          onClick={onSubmit}
           className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
           Save
         </button>
       </div>
+     
       </form>
     
               
@@ -294,8 +327,10 @@ const onSubmit=()=>{
 
     </div>
 </div>
+
 </div>
       {JSON.stringify({name:name,profession,availableFor,social:socialLink,profile:image,description})}
+      <ToastContainer/>
     </>
   );
 };
@@ -309,7 +344,7 @@ interface social{
 }
 interface Profile {
   name:string | ""
-  social:social | undefined
+  social:social
   profession:string | ""
   description:string | ""
   availableFor:string | ""

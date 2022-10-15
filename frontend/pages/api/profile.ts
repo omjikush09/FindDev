@@ -1,15 +1,13 @@
-import Axios from "axios";
-
 // import Profile from "../profile";
 import { backend } from '../../config';
 
 interface social{
-    github:string | ""
-}
- 
+    Github:string | "",
+    Linkedin:string |""
+  }
 interface Profile {
     name:string | ""
-    social:social | undefined
+    social:social 
     profession:string | ""
     description:string | ""
     availableFor:string | ""
@@ -18,20 +16,35 @@ interface Profile {
 
 // type updateProfile=>(any)
 
-export const updateProfile= async ({name="",social=undefined,profession="",availableFor="",profile=undefined}:Profile) =>{
+export const updateProfile= async ({name="",social={Github:"",Linkedin:""},profession="",availableFor="",profile=undefined,description=""}:Profile) =>{
     try {
       
-        const {data}= await backend.put<Profile>("/updateprofile",{name,social,profession,availableFor,profile})
+        const {data}= await backend.put<Profile>("/api/updateprofile",{name,social,profession,availableFor,profile,description})
         return data;
 
-    } catch (error) {
-        if(Axios.isAxiosError(error)){
-            throw error.message;
-
-        }else{
-             throw  "An Expected Error";
-
+    } catch (error:any) {
+        if(error.response?.data?.error){ 
+            throw new Error(error.response.data.error)
         }
+        throw new Error("Something went wrong") 
+    }
+}
+
+export const getProfile= async (signal:AbortSignal) =>{
+    try {
+      
+        const {data}= await backend.get("/api/getuser",{signal})
+        return data;
+
+    } catch (error:any) {
+        console.log(error);
+        if (error?.name== 'CanceledError'){
+           return
+        }
+        if(error.response?.data?.error){ 
+            throw new Error(error.response.data.error)
+        }
+        throw new Error("Something went wrong") 
     }
 }
 

@@ -26,7 +26,7 @@ export const signup=async (values:valuesSignup)=>{
         const {data}=await backend.post("api/signup",values)
         return data
     } catch (error:any) {
-        if(error.response.data.error){ 
+        if(error.response?.data?.error){ 
             throw new Error(error.response.data.error)
         }
         throw new Error("Something went wrong") 
