@@ -95,7 +95,7 @@ const [profession,setProfession]=useState("student")
 const onChangeProfession=(e:React.ChangeEvent<HTMLInputElement>)=>{
   setProfession(e.target.value)
 }
-
+// @ts-ignore
   const getProfilesToShow=async(choice,signal:AbortSignal)=>{
     try {
       
@@ -265,7 +265,7 @@ const onChangeProfession=(e:React.ChangeEvent<HTMLInputElement>)=>{
                   <select
                     // id="country"
                     name="profession"
-                    value={profession}
+                    value={profession}// @ts-ignore
                     onChange={onChangeProfession}
                     // autoComplete="country-name"
                     className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -329,6 +329,9 @@ const onChangeProfession=(e:React.ChangeEvent<HTMLInputElement>)=>{
               </dd>
             </dl>
           </div>
+          <div className="w-auto">
+          {person?.description && person.description}
+            </div>
           <div>
             <div className="-mt-px flex divide-x divide-gray-200">
               <div className="w-0 flex-1 flex">

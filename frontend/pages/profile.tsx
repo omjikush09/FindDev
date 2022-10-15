@@ -7,6 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getProfile, updateProfile,updateLanguage } from "./api/profile";
 import Link from "next/link";
+import Looking from "./../conponents/Looking"
 
 const Profile = () => {
   const filter= {
@@ -215,7 +216,7 @@ return ()=>{controller.abort()}
              
                   />
                 </div>
-                <p className="mt-2 text-sm text-gray-500">Brief description for yourself. </p>
+                <p className="mt-2 text-sm text-gray-500">Keep it short. </p>
               </div>
 
               <div className="col-span-6 sm:col-span-3">
@@ -346,7 +347,7 @@ return ()=>{controller.abort()}
         >
           Save
         </button>
-      </div>
+        </div>
             </form>
           </div>
         </div>
@@ -354,9 +355,11 @@ return ()=>{controller.abort()}
 
 
     </div>
-</div>
+  </div>
 
 </div>
+dfdsfdsf
+   {/* <Looking/> */}
         {JSON.stringify(languages)}
       {/* {JSON.stringify({name:name,profession,availableFor,social:socialLink,profile:image,description})} */}
       <ToastContainer/>

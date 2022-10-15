@@ -80,6 +80,7 @@ export const getAllUser= async (profession:string,choice:{
         const body={};
         for(let i=0;i<choice.length;i++){
             console.log(choice[i])
+            // @ts-ignore
             if(choice[i]===false){
                 continue;
             }
@@ -87,10 +88,12 @@ export const getAllUser= async (profession:string,choice:{
         }
         const sendParam={}
         for (const value in body){
+            // @ts-ignore
             if(body[value]===false){
                 continue;
             }
             console.log(value)
+            // @ts-ignore
             Object.assign(sendParam,{[value]:body[value]});
         }
         Object.assign(sendParam,{profession});
