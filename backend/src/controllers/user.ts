@@ -2,17 +2,18 @@ import { PrismaClient } from "@prisma/client";
 import { Request,Response } from "express"
 
 const prisma=new PrismaClient();
-export const getUser=async(req:Request,res:Response,user:any)=>{
+export const getUser=async(req:Request,res:Response)=>{
     // const userId=req.auth.userId
     console.log(JSON.stringify(req.user))
-  
-    // const user=await prisma.user.findUnique({
-    //     where:{
-    //         id:userId
-    //     }
-    // })
+    const user=req?.user;
+    const id=user?.id;
+    const data=await prisma.user.findUnique({
+        where:{
+            id
+        }
+    })
 
-    return res.send("hello")
+    return res.send(data)
 }
 
 
@@ -21,13 +22,18 @@ export const updateProfile=async (req:Request,res:Response)=>{
     // const id=user?.id;
     const id=user?.id;
     // console.log(user);
+    const body=req.body
     try {
         const updateUser = await prisma.user.update({
             where: {
               id,
             },
             data: {
-                ...req.body
+               name:body.name,
+               description:body.description,
+               profession:body.profession,
+               availableFor:body.availableFor,
+               social:body.social
             },
           })
     
@@ -54,7 +60,8 @@ export const getAllUsers=async (req:Request,res:Response)=>{
             select:{
                 id:true,
                 name:true,
-                social:true
+                social:true,
+                description:true
             }
         })
         return res.json(users)
