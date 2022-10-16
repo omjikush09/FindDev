@@ -156,3 +156,32 @@ export const updateUserLooking=async (req:Request,res:Response)=>{
     }
     }
 }
+
+
+export const updateUserMonth=async (req:Request,res:Response)=>{
+    const userId=req.user?.id 
+    const body =req.body;
+    try {
+        const month= await prisma.month.update({
+            where:{
+                userId
+            },
+        data:body,
+    })
+    // console.log(language)
+    return res.json(month)
+ } catch (error) {
+
+    try {
+        const month= await prisma.month.create({
+        
+        data:{...body,userId},
+    })
+    return res.json(month)
+    } catch (error) {
+        console.log(error)
+        return res.status(400).json({error});
+    }
+    }
+}
+
