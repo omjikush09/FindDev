@@ -28,17 +28,16 @@ const filters = [
       { value: "csharp", label: 'C#' },
     ],
   },
-  // {
-  //   id: 'category',
-  //   name: 'Category',
-  //   options: [
-  //     { value: 'new-arrivals', label: 'All New Arrivals' },
-  //     { value: 'tees', label: 'Tees' },
-  //     { value: 'crewnecks', label: 'Crewnecks' },
-  //     { value: 'sweatshirts', label: 'Sweatshirts' },
-  //     { value: 'pants-shorts', label: 'Pants & Shorts' },
-  //   ],
-  // },
+  {
+    id: 'looking',
+    name: 'Looking For',
+    options: [
+      { value: "hackathon", label: 'Hackathon' },
+      { value: "competative_programing", label: 'Competative Programing' },
+      { value: "dsa", label: 'Data structure and Algorithm ' },
+     
+    ],
+  },
   // {
   //   id: 'sizes',
   //   name: 'Sizes',
@@ -376,7 +375,7 @@ const onChangeProfession=(e:React.ChangeEvent<HTMLInputElement>)=>{
           </div>
         </main>
       </div>
-      {JSON.stringify(choice)}
+      {/* {JSON.stringify(choice)} */}
     </div>
   )
 }

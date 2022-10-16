@@ -52,11 +52,15 @@ export const getAllUsers=async (req:Request,res:Response)=>{
     console.log(profession)
     // console.log(query)
     const newQuery={}
+    const newQueryLooking={}
     for (const q in query){
         console.log(q);
         
         if(q==="profession"){
            continue
+        }else if(q=== "hackathon" ||  q==="competative_programing" || q==="dsa" ){
+            Object.assign(newQueryLooking,{[q]:true})
+            continue;
         }
         Object.assign(newQuery,{[q]:true})
     }
@@ -66,7 +70,8 @@ export const getAllUsers=async (req:Request,res:Response)=>{
         const users=await prisma.user.findMany({
             where:{
                 profession,
-                Language:newQuery
+                Language:newQuery,
+                Looking:newQueryLooking
             },
             select:{
                 id:true,
@@ -124,3 +129,30 @@ export const updateUserLanguage=async (req:Request,res:Response)=>{
     }
 }
 
+//upadate looking
+export const updateUserLooking=async (req:Request,res:Response)=>{
+    const userId=req.user?.id 
+    const body =req.body;
+    try {
+        const language= await prisma.looking.update({
+            where:{
+                userId
+            },
+        data:body,
+    })
+    // console.log(language)
+    return res.json(language)
+ } catch (error) {
+
+    try {
+        const language= await prisma.looking.create({
+        
+        data:{...body,userId},
+    })
+    return res.json(language)
+    } catch (error) {
+        console.log(error)
+        return res.status(400).json({error});
+    }
+    }
+}

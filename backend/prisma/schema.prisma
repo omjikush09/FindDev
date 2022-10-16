@@ -12,7 +12,7 @@ model User {
   email        String        @unique
   password     String?
   profile      String?
-  name         String?      @default("")
+  name         String?       @default("")
   social       Json?
   salt         String
   signup       SignupType
@@ -22,6 +22,8 @@ model User {
   availableFor availableFor?
   profession   profession?
   Language     Language?
+  Looking      Looking?
+  Month        Month?
 }
 
 model Language {
@@ -38,6 +40,37 @@ model Language {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   user       User     @relation(fields: [userId], references: [id])
+}
+
+model Looking {
+  id                     Int      @id @default(autoincrement())
+  hackathon              Boolean  @default(false)
+  competative_programing Boolean  @default(false)
+  dsa                    Boolean  @default(false)
+  userId                 String   @unique
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+  user                   User     @relation(fields: [userId], references: [id])
+}
+
+model Month {
+  id        Int      @id @default(autoincrement())
+  january   Boolean  @default(false)
+  february  Boolean  @default(false)
+  march     Boolean  @default(false)
+  april     Boolean  @default(false)
+  may       Boolean  @default(false)
+  june      Boolean  @default(false)
+  july      Boolean  @default(false)
+  august    Boolean  @default(false)
+  aeptember Boolean  @default(false)
+  october   Boolean  @default(false)
+  november  Boolean  @default(false)
+  december  Boolean  @default(false)
+  userId    String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 enum SignupType {

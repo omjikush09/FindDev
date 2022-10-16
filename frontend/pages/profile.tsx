@@ -5,9 +5,9 @@ import React ,{useState,useEffect}from "react";
 // import styles from "../styles/Profile.module.scss";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getProfile, updateProfile,updateLanguage } from "./api/profile";
+import { getProfile, updateProfile,updateLanguage,updateLooking } from "./api/profile";
 import Link from "next/link";
-import Looking from "./../conponents/Looking"
+// import Looking from "./../conponents/Looking"
 
 const Profile = () => {
   const filter= {
@@ -20,7 +20,58 @@ const Profile = () => {
       { value: "golang", label: 'Golang' },
       { value: "ruby", label: 'Ruby' },
       { value: "python", label: 'Python' },
-      { value: "python", label: 'SQL' },
+      { value: "sql", label: 'SQL' },
+      { value: "csharp", label: 'C#' },
+    ],
+  }
+
+  const lookingChoice= {
+    options: [
+      { value: "hackathon", label: 'Hackathon' },
+      { value: "competative_programing", label: 'Competative Programing' },
+      { value: "dsa", label: 'Data structure and Algorithm ' },
+      
+    ],
+  }
+  const [looking,setLooking]=useState(lookingChoice.options.map((option,index)=>{
+    return (
+      {[option.value]:false}
+    )
+  }))
+  const onChangeLooking=(e:React.ChangeEvent<HTMLInputElement>,position:number)=>{
+    const newLooking=looking.map((item,index)=>
+      index===position ? {[e.target.value]:!item[e.target.value]}:{...item})
+      
+    setLooking(newLooking)
+  }
+
+
+
+  const onSubmitLooking=async (e:React.FormEvent<HTMLButtonElement>)=>{
+    e.preventDefault();
+    try {
+      
+      await updateLooking(looking)
+      toast.success("Success fully saved the data")
+    
+    } catch (err) {
+      console.log(err)
+      let errorS=String(err)
+      toast.error(errorS)
+    }
+  
+  }
+
+  const month= {
+  
+    options: [
+      { value: "january", label: 'C++' },
+      { value: "february", label: 'Java' },
+      { value: " march", label: 'JavaScript' },
+      { value: "golang", label: 'Golang' },
+      { value: "ruby", label: 'Ruby' },
+      { value: "python", label: 'Python' },
+      { value: "sql", label: 'SQL' },
       { value: "csharp", label: 'C#' },
     ],
   }
@@ -32,6 +83,9 @@ const Profile = () => {
       {[option.value]:false}
     )
   }))
+
+
+
   
   // const [profession,setProfession]=useState("Student")
   const [socialLink,setSocialLink]=useState<social>({
@@ -353,14 +407,65 @@ return ()=>{controller.abort()}
         </div>
       </div>
 
+      <div className="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6">
+        <div className="md:grid md:grid-cols-3 md:gap-6">
+          <div className="md:col-span-1">
+            <h3 className="text-lg font-medium leading-6 text-gray-900">Looking For</h3>
+            <p className="mt-1 text-sm text-gray-500"></p>
+          </div>
+          <div className="mt-5 md:mt-0 md:col-span-2">
+            <form action="#" method="POST">
+            <label htmlFor="about" className="block text-sm font-medium text-gray-700">
+                  Select
+                </label>
+                        {lookingChoice.options.map((option, optionIdx:number) => (
+                            <div key={optionIdx} className="flex items-center">
+                              <input
+                                // id={`${section.id}-${optionIdx}`}
+                                // name={`${option.id}[]`}
+                                
+                                defaultValue={option.value}
+                                // checked={onChangeLooking()}
+                                value={option.value}
+                                onChange={(e)=>onChangeLooking(e,optionIdx)}
+                                type="checkbox"
+                                className="h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500"
+                              />
+                              <label className="ml-3 text-sm text-gray-600">
+                                {option.label}
+                              </label>
+                            </div>
+                            ))
+                        }
+
+             
+              <div className="flex justify-end">
+        <button
+          type="button"
+          className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          onClick={onSubmitLooking}
+          className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        >
+          Save
+        </button>
+        </div>
+            </form>
+          </div>
+        </div>
+      </div>
 
     </div>
   </div>
 
 </div>
-dfdsfdsf
+
    {/* <Looking/> */}
-        {JSON.stringify(languages)}
+        {/* {JSON.stringify(languages)} */}
       {/* {JSON.stringify({name:name,profession,availableFor,social:socialLink,profile:image,description})} */}
       <ToastContainer/>
     </>
