@@ -290,7 +290,7 @@ return ()=>{controller.abort()}
                     <option value={"working"} >Working</option>
                   </select>
                 </div>
-                <div className="col-span-6 sm:col-span-3">
+                {/* <div className="col-span-6 sm:col-span-3">
                   <label htmlFor="country" className="block text-sm font-medium text-gray-700">
                     Available For
                   </label>
@@ -302,21 +302,21 @@ return ()=>{controller.abort()}
                     // autoComplete="country-name"
                     className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   >
-                    {/* <option>Unite</option> */}
+                   
                     <option value={"hackathon"} >Hackathon</option>
                     <option value={"dsa"} >DSA</option>
                     <option value={"competative_programing"}>Competative Programing</option>
                   </select>
-                </div>
-                <div>
+                </div> */}
+                {/* <div>
                 <label className="block text-sm font-medium text-gray-700">Profile Image</label>
                 <div className="mt-1 flex items-center space-x-5">
                   <span className="inline-block h-12 w-12 rounded-full overflow-hidden bg-gray-100">
                     
-                    {/* <Image src={""} alt={"Image"} /> */}
-                    {/* <svg className="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                    <Image src={""} alt={"Image"} />
+                    <svg className="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                    </svg> */}
+                    </svg>
                   </span>
                 
                   <input
@@ -330,8 +330,9 @@ return ()=>{controller.abort()}
                   />
                   
                  
-                </div>
-              </div> <div className="flex justify-end">
+                </div> 
+              </div> */}
+               <div className="flex justify-end">
         <button
           type="button"
           className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
