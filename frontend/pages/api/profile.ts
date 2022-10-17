@@ -93,6 +93,29 @@ export const updateLooking= async (language: {
     }
 }
 
+export const updateMonth= async (month: {
+    [x: string]: boolean;
+}[]) =>{
+    try {
+        const body={};
+        for(let i=0;i<month.length;i++){
+            console.log(month[i])
+          Object.assign(body,month[i]);
+        }
+        const {data}= await backend.post("/api/month",{...body})
+        return data;
+    } catch (error:any) {
+        console.log(error);
+        if (error?.name== 'CanceledError'){
+           return
+        }
+        if(error.response?.data?.error){ 
+            throw new Error(error.response.data.error)
+        }
+        throw new Error("Something went wrong") 
+    }
+}
+
 
 export const getAllUser= async (profession:string,choice:{
     [x: string]: boolean;
