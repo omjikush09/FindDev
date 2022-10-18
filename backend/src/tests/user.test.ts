@@ -15,4 +15,16 @@ describe("USER ",()=>{
         })
     })
 
+    it("GET /todos ---> array todos",()=>{
+        return request(app).get("/api/getuser").expect("Content-Type",/json/).expect(200).then(res=>{
+            expect(res.body).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining({
+                        $id:expect.any(String)
+                    })
+                ])
+            )
+        })
+    })
+
 })
